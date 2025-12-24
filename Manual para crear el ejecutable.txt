@@ -1,0 +1,64 @@
+================================================================
+GUIA DE COMPILACION: STAFFING OPTIMIZER A .EXE
+================================================================
+
+Esta guia detalla los pasos para convertir el script de Python
+(main.py) que utiliza Flet, PuLP, HighSpy y OpenPyXL en un unico
+archivo ejecutable (.exe) para Windows.
+
+
+----------------------------------------------------------------
+1. REQUISITOS PREVIOS
+----------------------------------------------------------------
+Asegurate de tener instalado Python (version 3.9 o superior recomendada).
+
+
+----------------------------------------------------------------
+2. PREPARACION DEL ENTORNO (Virtual Environment)
+----------------------------------------------------------------
+Para evitar errores de dependencias y reducir el tamaño del archivo
+final, es CRUCIAL trabajar en un entorno limpio.
+
+PASO 1: Abre tu terminal (PowerShell o CMD) en la carpeta del proyecto.
+
+PASO 2: Crea el entorno virtual ejecutando:
+        python -m venv .venv
+
+PASO 3: Activa el entorno (Windows):
+        .\.venv\Scripts\activate
+
+        (Deberas ver "(.venv)" al inicio de tu linea de comandos).
+
+PASO 4: Instala SOLO las librerias necesarias:
+        pip install flet pulp openpyxl highspy pyinstaller
+
+
+----------------------------------------------------------------
+3. LIMPIEZA (Importante si fallo antes)
+----------------------------------------------------------------
+Si has intentado compilar anteriormente y fallo, debes borrar los
+siguientes archivos temporales para evitar conflictos:
+
+1. Borra la carpeta "build".
+2. Borra la carpeta "dist".
+3. Borra el archivo "StaffingOptimizer.spec" (si existe).
+
+
+----------------------------------------------------------------
+4. EL COMANDO DE COMPILACION
+----------------------------------------------------------------
+Este es el paso critico. Asegurate de estar en la carpeta donde
+esta "main.py" y ejecuta el siguiente comando (todo en una linea):
+
+pyinstaller --name "StaffingOptimizer" --onefile --console --collect-all pulp --hidden-import=flet --hidden-import=highspy --hidden-import=openpyxl main.py
+
+
+>>> NOTA TECNICA SOBRE PuLP:
+Es obligatorio usar el flag "--collect-all pulp". La libreria PuLP
+necesita llamar a un archivo .exe interno para ejecutar el motor CBC.
+Si usas solo "--hidden-import=pulp", ese ejecutable no se copia y el
+modelo dara siempre error o dira que es "infeasible" (no factible).
+
+================================================================
+FIN DE LA GUIA
+================================================================

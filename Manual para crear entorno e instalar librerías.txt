@@ -1,0 +1,76 @@
+================================================================
+ MANUAL DE INSTALACION Y EJECUCION (PYTHON / WINDOWS)
+ PROYECTO: Staffing-Optimization-BDI
+================================================================
+
+REQUISITO PREVIO:
+Abre una terminal (PowerShell) dentro de la carpeta de tu proyecto.
+
+
+----------------------------------------------------------------
+PASO 1: LIMPIEZA INICIAL
+----------------------------------------------------------------
+Si en tu carpeta ya existe una carpeta llamada "venv", "env" o ".venv"
+(que se copio desde la ubicacion anterior), BORRALA MANUALMENTE.
+Los entornos virtuales no funcionan si se mueven de sitio.
+
+
+----------------------------------------------------------------
+PASO 2: CREAR EL ENTORNO VIRTUAL
+----------------------------------------------------------------
+Ejecuta este comando para crear un espacio aislado nuevo:
+
+    python -m venv venv
+
+
+----------------------------------------------------------------
+PASO 3: ACTIVAR EL ENTORNO
+----------------------------------------------------------------
+Ejecuta este comando para entrar en el modo aislado:
+
+    .\venv\Scripts\Activate
+
+NOTA: Si recibes un error rojo sobre "scripts deshabilitados",
+ejecuta este comando de permiso y vuelve a intentar el Paso 3:
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+(Sabras que funciono si ves "(venv)" al inicio de la linea).
+
+
+----------------------------------------------------------------
+PASO 4: INSTALAR LIBRERIAS (CRITICO)
+----------------------------------------------------------------
+Mira los archivos de tu carpeta y elige la OPCION A o la OPCION B.
+
+>>> OPCION A (Recomendada): Si ves un archivo "requirements.txt"
+    Ejecuta este comando para instalar todo automaticamente:
+
+    pip install -r requirements.txt
+
+
+>>> OPCION B (Manual): Si NO ves el archivo "requirements.txt"
+    Ejecuta este comando para instalar las librerias necesarias
+    (Flet, PuLP, OpenPyXL, Highspy):
+
+    pip install flet pulp openpyxl highspy
+
+
+----------------------------------------------------------------
+PASO 5: GUARDAR CONFIGURACION (Solo si usaste la Opcion B)
+----------------------------------------------------------------
+Si instalaste las librerias manualmente, ejecuta esto para crear
+el archivo de requisitos para el futuro:
+
+    pip freeze > requirements.txt
+
+
+----------------------------------------------------------------
+PASO 6: EJECUTAR EL PROGRAMA
+----------------------------------------------------------------
+Todo listo. Lanza tu aplicacion con:
+
+    python main.py
+
+================================================================
+ FIN DE LA GUIA
+================================================================
