@@ -1,73 +1,77 @@
 ================================================================
- MANUAL DE INSTALACION Y EJECUCION (PYTHON / WINDOWS)
+ MANUAL DE INSTALACION Y EJECUCION (PYTHON / VS CODE)
  PROYECTO: Staffing-Optimization-BDI
 ================================================================
 
 REQUISITO PREVIO:
-Abre una terminal (PowerShell) dentro de la carpeta de tu proyecto.
+Abre la carpeta del proyecto en VS Code y abre una terminal (Ctrl + ñ).
 
 
 ----------------------------------------------------------------
 PASO 1: LIMPIEZA INICIAL
 ----------------------------------------------------------------
 Si en tu carpeta ya existe una carpeta llamada "venv", "env" o ".venv"
-(que se copio desde la ubicacion anterior), BORRALA MANUALMENTE.
+(copiada de otra ubicacion), BORRALA MANUALMENTE.
 Los entornos virtuales no funcionan si se mueven de sitio.
 
 
 ----------------------------------------------------------------
 PASO 2: CREAR EL ENTORNO VIRTUAL
 ----------------------------------------------------------------
-Ejecuta este comando para crear un espacio aislado nuevo:
+Ejecuta este comando en la terminal para crear el espacio aislado:
 
     python -m venv venv
 
 
 ----------------------------------------------------------------
-PASO 3: ACTIVAR EL ENTORNO
+PASO 3: ACTIVAR EL ENTORNO (EN TERMINAL)
 ----------------------------------------------------------------
-Ejecuta este comando para entrar en el modo aislado:
+Ejecuta esto para activar el modo aislado en la consola actual:
 
     .\venv\Scripts\Activate
 
-NOTA: Si recibes un error rojo sobre "scripts deshabilitados",
-ejecuta este comando de permiso y vuelve a intentar el Paso 3:
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
-
-(Sabras que funciono si ves "(venv)" al inicio de la linea).
+(Si sale error rojo de scripts, ejecuta:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+y repite el comando de activar).
 
 
 ----------------------------------------------------------------
-PASO 4: INSTALAR LIBRERIAS (CRITICO)
+PASO 4: VINCULAR EL ENTORNO A VS CODE (¡IMPORTANTE!)
 ----------------------------------------------------------------
-Mira los archivos de tu carpeta y elige la OPCION A o la OPCION B.
+Para que el boton de "Play" y el autocompletado funcionen con las
+librerias que vamos a instalar, debes decirselo a VS Code:
 
->>> OPCION A (Recomendada): Si ves un archivo "requirements.txt"
-    Ejecuta este comando para instalar todo automaticamente:
+1. Presiona las teclas: Ctrl + Shift + P
+2. Escribe y selecciona: Python: Select Interpreter
+3. En la lista, busca y selecciona la opcion que dice "venv"
+   (Suele aparecer con una estrella o decir "Recommended").
 
+NOTA: Si VS Code te pregunta si quieres seleccionarlo para el
+workspace, di que SI.
+
+
+----------------------------------------------------------------
+PASO 5: INSTALAR LIBRERIAS
+----------------------------------------------------------------
+Ahora que VS Code y la terminal miran al sitio correcto, instala:
+
+>>> OPCION A (Si tienes requirements.txt):
     pip install -r requirements.txt
 
-
->>> OPCION B (Manual): Si NO ves el archivo "requirements.txt"
-    Ejecuta este comando para instalar las librerias necesarias
-    (Flet, PuLP, OpenPyXL, Highspy):
-
+>>> OPCION B (Manual):
     pip install flet pulp openpyxl highspy
 
 
 ----------------------------------------------------------------
-PASO 5: GUARDAR CONFIGURACION (Solo si usaste la Opcion B)
+PASO 6: GUARDAR CONFIGURACION (Solo si usaste Opcion B)
 ----------------------------------------------------------------
-Si instalaste las librerias manualmente, ejecuta esto para crear
-el archivo de requisitos para el futuro:
-
     pip freeze > requirements.txt
 
 
 ----------------------------------------------------------------
-PASO 6: EJECUTAR EL PROGRAMA
+PASO 7: EJECUTAR EL PROGRAMA
 ----------------------------------------------------------------
-Todo listo. Lanza tu aplicacion con:
+Ya puedes darle al boton de "Play" de VS Code o escribir:
 
     python main.py
 

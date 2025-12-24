@@ -1,57 +1,61 @@
 ================================================================
-GUIA DE COMPILACION: STAFFING OPTIMIZER A .EXE
+ GUIA ACTUALIZADA DE COMPILACION (.EXE)
+ PROYECTO: Staffing-Optimization-BDI
+ FECHA: Diciembre 2025
 ================================================================
 
-Esta guia detalla los pasos para convertir el script de Python
-(main.py) que utiliza Flet, PuLP, HighSpy y OpenPyXL en un unico
-archivo ejecutable (.exe) para Windows.
+IMPORTANTE:
+Sigue estos pasos ESTRICTAMENTE en orden. No te saltes ninguno.
+Si usas Python 3.13 y esto falla, necesitaras instalar Python 3.11.
 
 
 ----------------------------------------------------------------
-1. REQUISITOS PREVIOS
+PASO 1: PREPARACION LIMPIA DEL ENTORNO
 ----------------------------------------------------------------
-Asegurate de tener instalado Python (version 3.9 o superior recomendada).
+Para evitar mezclar librerias globales con las locales, vamos a
+reinstalar todo lo necesario dentro del entorno virtual.
+
+1. Abre la terminal (PowerShell) en la carpeta del proyecto.
+
+2. Si la carpeta "venv" existe, BORRALA completamente.
+
+3. Crea el entorno de nuevo:
+   python -m venv venv
+
+4. Activa el entorno:
+   .\venv\Scripts\Activate
+
+   (Asegurate de ver "(venv)" al principio de la linea).
+
+5. Instala las librerias y HERRAMIENTAS DE COMPILACION:
+   
+   pip install flet pulp openpyxl highspy flet-desktop pyinstaller
+
+   NOTA: Es vital instalar "pyinstaller" aqui mismo, para que se
+   ejecute desde el entorno y no desde Windows global.
 
 
 ----------------------------------------------------------------
-2. PREPARACION DEL ENTORNO (Virtual Environment)
+PASO 2: LIMPIEZA DE INTENTOS FALLIDOS
 ----------------------------------------------------------------
-Para evitar errores de dependencias y reducir el tamaño del archivo
-final, es CRUCIAL trabajar en un entorno limpio.
+Antes de compilar, borra los residuos de los errores anteriores
+para que no interfieran:
 
-PASO 1: Abre tu terminal (PowerShell o CMD) en la carpeta del proyecto.
-
-PASO 2: Crea el entorno virtual ejecutando:
-        python -m venv .venv
-
-PASO 3: Activa el entorno (Windows):
-        .\.venv\Scripts\activate
-
-        (Deberas ver "(.venv)" al inicio de tu linea de comandos).
-
-PASO 4: Instala SOLO las librerias necesarias:
-        pip install flet pulp openpyxl highspy pyinstaller
-
-
-----------------------------------------------------------------
-3. LIMPIEZA (Importante si fallo antes)
-----------------------------------------------------------------
-Si has intentado compilar anteriormente y fallo, debes borrar los
-siguientes archivos temporales para evitar conflictos:
-
-1. Borra la carpeta "build".
-2. Borra la carpeta "dist".
+1. Borra la carpeta "build" (si existe).
+2. Borra la carpeta "dist" (si existe).
 3. Borra el archivo "StaffingOptimizer.spec" (si existe).
 
 
 ----------------------------------------------------------------
-4. EL COMANDO DE COMPILACION
+PASO 3: EL COMANDO DE COMPILACION (MODIFICADO)
 ----------------------------------------------------------------
-Este es el paso critico. Asegurate de estar en la carpeta donde
-esta "main.py" y ejecuta el siguiente comando (todo en una linea):
+Hemos cambiado el comando para usar "python -m PyInstaller".
+Esto OBLIGA al sistema a usar las librerias del entorno (venv)
+y soluciona el error de "ModuleNotFoundError".
 
-pyinstaller --name "StaffingOptimizer" --onefile --console --collect-all pulp --hidden-import=flet --hidden-import=highspy --hidden-import=openpyxl main.py
+Copia y pega este comando exacto (todo en una linea):
 
+python -m PyInstaller --name "StaffingOptimizer" --onefile --console --collect-all pulp --hidden-import=flet --hidden-import=highspy --hidden-import=openpyxl main.py
 
 >>> NOTA TECNICA SOBRE PuLP:
 Es obligatorio usar el flag "--collect-all pulp". La libreria PuLP
@@ -59,6 +63,30 @@ necesita llamar a un archivo .exe interno para ejecutar el motor CBC.
 Si usas solo "--hidden-import=pulp", ese ejecutable no se copia y el
 modelo dara siempre error o dira que es "infeasible" (no factible).
 
+
+----------------------------------------------------------------
+PASO 4: VERIFICACION
+----------------------------------------------------------------
+1. Espera a que termine el proceso (puede tardar 1 o 2 minutos).
+2. Si termina con exito, veras un mensaje final:
+   "Building EXE from EXE-00.toc completed successfully."
+3. Tu archivo .exe estara dentro de la nueva carpeta "dist".
+
+
+----------------------------------------------------------------
+ANEXO: ¿QUE HACER SI SIGUE FALLANDO?
+----------------------------------------------------------------
+Si has seguido estos pasos y sigues recibiendo errores extraños,
+el problema es la version de Python 3.13 (que es muy nueva e
+inestable para crear ejecutables).
+
+SOLUCION:
+1. Descarga e instala Python 3.11 desde python.org.
+2. Borra la carpeta "venv".
+3. Crea el entorno especificando la version vieja:
+   py -3.11 -m venv venv
+4. Repite los pasos de instalacion y compilacion de esta guia.
+
 ================================================================
-FIN DE LA GUIA
+ FIN DE LA GUIA
 ================================================================
