@@ -1,19 +1,18 @@
 ================================================================
- GUIA ACTUALIZADA DE COMPILACION (.EXE)
+ GUIA ACTUALIZADA DE COMPILACION (.EXE) - V2
  PROYECTO: Staffing-Optimization-BDI
- FECHA: Diciembre 2025
+ FECHA: Diciembre 2025 (Revisado)
 ================================================================
 
 IMPORTANTE:
 Sigue estos pasos ESTRICTAMENTE en orden. No te saltes ninguno.
 Si usas Python 3.13 y esto falla, necesitaras instalar Python 3.11.
 
-
 ----------------------------------------------------------------
 PASO 1: PREPARACION LIMPIA DEL ENTORNO
 ----------------------------------------------------------------
-Para evitar mezclar librerias globales con las locales, vamos a
-reinstalar todo lo necesario dentro del entorno virtual.
+Para evitar mezclar librerias globales con las locales y evitar 
+errores de "ModuleNotFoundError", reinstalamos todo.
 
 1. Abre la terminal (PowerShell) en la carpeta del proyecto.
 
@@ -24,68 +23,76 @@ reinstalar todo lo necesario dentro del entorno virtual.
 
 4. Activa el entorno:
    .\venv\Scripts\Activate
-
    (Asegurate de ver "(venv)" al principio de la linea).
 
-5. Instala las librerias y HERRAMIENTAS DE COMPILACION:
+5. Instala las librerias, HERRAMIENTAS y PILLOW (para imagenes):
    
-   pip install flet pulp openpyxl highspy flet-desktop pyinstaller
+   pip install flet pulp openpyxl highspy flet-desktop pyinstaller Pillow
 
-   NOTA: Es vital instalar "pyinstaller" aqui mismo, para que se
-   ejecute desde el entorno y no desde Windows global.
-
+   NOTA: Hemos añadido "Pillow". Es OBLIGATORIO para que PyInstaller
+   pueda procesar imagenes e iconos sin dar error.
 
 ----------------------------------------------------------------
-PASO 2: LIMPIEZA DE INTENTOS FALLIDOS
+PASO 2: PREPARACION DEL ICONO (CRITICO PARA TRANSPARENCIA)
 ----------------------------------------------------------------
-Antes de compilar, borra los residuos de los errores anteriores
-para que no interfieran:
+Para evitar que el icono salga con fondo blanco:
+
+1. NO uses el archivo .png directamente en el comando.
+2. Ve a un conversor online (ej. icoconvert.com).
+3. Sube tu PNG transparente y conviertelo a ".ico" MULTITAMAÑO
+   (asegurate de incluir tamaños 16x16, 32x32, 48x48 y 256x256).
+4. Descarga el archivo y renombralo a "BDI.ico".
+5. Colocalo en la raiz del proyecto (junto a main.py).
+
+----------------------------------------------------------------
+PASO 3: LIMPIEZA DE INTENTOS FALLIDOS
+----------------------------------------------------------------
+Antes de compilar, borra los residuos de los errores anteriores:
 
 1. Borra la carpeta "build" (si existe).
 2. Borra la carpeta "dist" (si existe).
 3. Borra el archivo "StaffingOptimizer.spec" (si existe).
 
-
 ----------------------------------------------------------------
-PASO 3: EL COMANDO DE COMPILACION (MODIFICADO)
+PASO 4: EL COMANDO DE COMPILACION (FINAL)
 ----------------------------------------------------------------
-Hemos cambiado el comando para usar "python -m PyInstaller".
-Esto OBLIGA al sistema a usar las librerias del entorno (venv)
-y soluciona el error de "ModuleNotFoundError".
+Este comando incluye la correccion del icono y las librerias ocultas.
 
 Copia y pega este comando exacto (todo en una linea):
 
-python -m PyInstaller --name "StaffingOptimizer" --onefile --console --collect-all pulp --hidden-import=flet --hidden-import=highspy --hidden-import=openpyxl main.py
+python -m PyInstaller --name "StaffingOptimizer" --onefile --console --collect-all pulp --hidden-import=flet --hidden-import=highspy --hidden-import=openpyxl --icon "BDI.ico" main.py
 
->>> NOTA TECNICA SOBRE PuLP:
-Es obligatorio usar el flag "--collect-all pulp". La libreria PuLP
-necesita llamar a un archivo .exe interno para ejecutar el motor CBC.
-Si usas solo "--hidden-import=pulp", ese ejecutable no se copia y el
-modelo dara siempre error o dira que es "infeasible" (no factible).
-
+>>> PUNTOS CLAVE:
+A) Usamos "python -m PyInstaller" para asegurar el uso del venv.
+B) Usamos "--collect-all pulp" para que el motor matematico funcione.
+C) Usamos "--icon" apuntando al archivo .ico real, no al png.
 
 ----------------------------------------------------------------
-PASO 4: VERIFICACION
+PASO 5: VERIFICACION Y CACHE DE WINDOWS
 ----------------------------------------------------------------
-1. Espera a que termine el proceso (puede tardar 1 o 2 minutos).
-2. Si termina con exito, veras un mensaje final:
-   "Building EXE from EXE-00.toc completed successfully."
-3. Tu archivo .exe estara dentro de la nueva carpeta "dist".
+1. Espera el mensaje "Building EXE... completed successfully."
+2. Tu archivo estara en la carpeta "dist".
 
+>>> ¿EL ICONO SE VE MAL O VIEJO?
+Windows tiene un caché de iconos muy agresivo. Si al generar el .exe
+sigues viendo el icono viejo o con fondo blanco:
+
+SOLUCION: Renombra el ejecutable.
+Ejemplo: Cambia "StaffingOptimizer.exe" a "StaffingOptimizer_v1.exe".
+Esto obliga a Windows a leer el icono nuevo con transparencia real.
 
 ----------------------------------------------------------------
 ANEXO: ¿QUE HACER SI SIGUE FALLANDO?
 ----------------------------------------------------------------
-Si has seguido estos pasos y sigues recibiendo errores extraños,
-el problema es la version de Python 3.13 (que es muy nueva e
-inestable para crear ejecutables).
+Si recibes errores de DLLs o cierres inesperados, el problema suele
+ser Python 3.13 (demasiado nuevo).
 
 SOLUCION:
 1. Descarga e instala Python 3.11 desde python.org.
 2. Borra la carpeta "venv".
 3. Crea el entorno especificando la version vieja:
    py -3.11 -m venv venv
-4. Repite los pasos de instalacion y compilacion de esta guia.
+4. Repite los pasos de esta guia.
 
 ================================================================
  FIN DE LA GUIA
